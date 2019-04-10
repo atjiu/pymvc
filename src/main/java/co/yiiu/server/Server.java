@@ -1,7 +1,8 @@
 package co.yiiu.server;
 
 import co.yiiu.handler.DispatchHttpHandler;
-import co.yiiu.plugin.*;
+import co.yiiu.plugin.Beans;
+import co.yiiu.plugin.Register;
 import co.yiiu.util.PropUtil;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class Server {
       try {
         Method[] methods = value.getClass().getMethods();
         for (Method method : methods) {
-          if(method.getName().equals("init")) {
+          if (method.getName().equals("init")) {
             method.invoke(value);
           }
         }

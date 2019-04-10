@@ -7,12 +7,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.undertow.server.HttpServerExchange;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Map;
 
 /**
  * Created by tomoya at 2019/4/9
- *
+ * <p>
  * 视图解析插件
  */
 @Plugin
