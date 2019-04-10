@@ -2,6 +2,8 @@ package co.yiiu.controller;
 
 import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.GetMapping;
+import co.yiiu.annotation.PostMapping;
+import co.yiiu.annotation.ResponseBody;
 import io.undertow.server.HttpServerExchange;
 
 import java.util.Arrays;
@@ -19,6 +21,13 @@ public class UserController {
     List<String> users = Arrays.asList("tomcat", "jetty", "undertow");
     model.put("users", users);
     return "user_list";
+  }
+
+  // 测试post请求
+  @PostMapping("/user/save")
+  @ResponseBody
+  public String save(HttpServerExchange exchange, Map<String, Object> model) {
+    return "user save";
   }
 
 }

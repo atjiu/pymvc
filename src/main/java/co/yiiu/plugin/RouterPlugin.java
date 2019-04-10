@@ -3,9 +3,11 @@ package co.yiiu.plugin;
 import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.GetMapping;
 import co.yiiu.annotation.Plugin;
+import co.yiiu.annotation.PostMapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +19,15 @@ import java.util.Map;
 @Plugin
 public class RouterPlugin implements IPlugin {
 
-  private Map<String, Map<String, Object>> methodMap = new HashMap<>();
+  private Map<String, Map<String, Object>> getMappingMap = new HashMap<>();
+  private Map<String, Map<String, Object>> postMappingMap = new HashMap<>();
 
-  public Map<String, Map<String, Object>> getMethodMap() {
-    return methodMap;
+  public Map<String, Map<String, Object>> getGetMappingMap() {
+    return getMappingMap;
+  }
+
+  public Map<String, Map<String, Object>> getPostMappingMap() {
+    return postMappingMap;
   }
 
   private List<Object> getController() {
@@ -41,16 +48,26 @@ public class RouterPlugin implements IPlugin {
     for (Object controller : controllers) {
       Method[] methods = controller.getClass().getMethods();
       for (Method method : methods) {
-        GetMapping declaredAnnotationMethod = method.getDeclaredAnnotation(GetMapping.class);
-        if (declaredAnnotationMethod != null) {
-          String url = declaredAnnotationMethod.value();
-          Map<String, Object> map = new HashMap<>();
-          map.put("method", method);
-          map.put("clazz", controller);
-          map.put("params", method.getParameters());
-          methodMap.put(url, map);
+        // get method
+        GetMapping getMappingMethod = method.getDeclaredAnnotation(GetMapping.class);
+        if (getMappingMethod != null) {
+          getMappingMap.put(getMappingMethod.value(), assemble(method, controller, method.getParameters()));
+        }
+        // post method
+        PostMapping postMappingMethod = method.getDeclaredAnnotation(PostMapping.class);
+        if (postMappingMethod != null) {
+          postMappingMap.put(postMappingMethod.value(), assemble(method, controller, method.getParameters()));
         }
       }
     }
+  }
+
+
+  public Map<String, Object> assemble(Method method, Object clazz, Parameter[] parameters) {
+    Map<String, Object> map = new HashMap<>();
+    map.put("method", method);
+    map.put("clazz", clazz);
+    map.put("params", parameters);
+    return map;
   }
 }

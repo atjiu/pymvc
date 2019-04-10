@@ -16,12 +16,7 @@
 
   <dependencies>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-    </dependency>
-
+    <!--logback日志-->
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-core</artifactId>
@@ -39,7 +34,9 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.7.25</version>
     </dependency>
+    <!--end-->
 
+    <!--服务器容器-->
     <dependency>
       <groupId>io.undertow</groupId>
       <artifactId>undertow-core</artifactId>
@@ -50,18 +47,26 @@
       <artifactId>undertow-servlet</artifactId>
       <version>${undertow.version}</version>
     </dependency>
+    <!--end-->
 
+    <!--=================================分割线=================================-->
+
+    <!--下面的依赖是框架里不应该出现的-->
+    <!--freemarker视图要使用的依赖-->
     <dependency>
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
       <version>2.3.28</version>
     </dependency>
+    <!--end-->
 
+    <!--这个是响应json时使用的依赖-->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.8.5</version>
     </dependency>
+    <!--end-->
 
   </dependencies>
 

@@ -8,7 +8,10 @@ import co.yiiu.plugin.ViewResolvePlugin;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
+import io.undertow.util.HttpString;
 
+import javax.servlet.HttpMethodConstraintElement;
+import javax.servlet.annotation.HttpMethodConstraint;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +29,20 @@ public class DispatchHttpHandler implements HttpHandler {
   public void handleRequest(HttpServerExchange exchange) throws Exception {
     // 获取请求路径
     String path = exchange.getRequestPath();
-    Map<String, Object> value = routerPlugin.getMethodMap().get(path);
+    String requestMethod = exchange.getRequestMethod().toString();
+    Map<String, Object> value = null;
+    if (requestMethod.equalsIgnoreCase("GET")) {
+      value = routerPlugin.getGetMappingMap().get(path);
+    } else if (requestMethod.equalsIgnoreCase("POST")) {
+      value = routerPlugin.getPostMappingMap().get(path);
+    }
     if (value != null) {
+      // 转发部分
       Map<String, Object> model = new HashMap<>();
       Object clazz = value.get("clazz");
       Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
+
+      // 响应部分
       // 判断是否有 @ResponseBody 注解
       ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
       if (responseBodyAnnotation == null) {
@@ -50,4 +62,5 @@ public class DispatchHttpHandler implements HttpHandler {
       exchange.getResponseSender().send("404");
     }
   }
+
 }
