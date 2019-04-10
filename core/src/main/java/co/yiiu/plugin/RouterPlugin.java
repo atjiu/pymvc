@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by tomoya at 2019/4/10
  */
-@Plugin
+@Plugin(active = true)
 public class RouterPlugin implements IPlugin {
 
   private Logger log = LoggerFactory.getLogger(RouterPlugin.class);

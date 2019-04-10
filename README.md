@@ -20,9 +20,10 @@ PYMVC是一个基于`undertow`封装的支持插件的mvc框架，功能逐渐�
 
 1. 创建类，继承 `IPlugin` 接口，并添加上 `Plugin` 注解，表示这是一个插件类
 2. 将你的插件业务写在 `init()` 方法里
+3. 注意，如果要想让插件生效，一定要将 `active` 赋值为 `true`
 
 ```java
-@Plugin
+@Plugin(active=true)
 public class ViewResolvePlugin implements IPlugin {
 
   private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);

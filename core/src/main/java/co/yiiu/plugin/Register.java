@@ -16,7 +16,7 @@ public class Register {
     Map<String, Object> beans = Beans.getBeans();
     beans.forEach((key, value) -> {
       Plugin declaredAnnotation = value.getClass().getDeclaredAnnotation(Plugin.class);
-      if (declaredAnnotation != null) {
+      if (declaredAnnotation != null && declaredAnnotation.active()) {
         plugins.put(value.getClass().getName(), value);
       }
     });

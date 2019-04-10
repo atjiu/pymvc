@@ -12,4 +12,6 @@ import java.lang.annotation.*;
 @Component
 public @interface Plugin {
 
+  boolean active() default false;
+
 }

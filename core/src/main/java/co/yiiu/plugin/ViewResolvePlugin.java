@@ -15,9 +15,9 @@ import java.util.Map;
 /**
  * Created by tomoya at 2019/4/9
  * <p>
- * 视图解析插件
+ * 视图解析插件，这个插件还要拆，要抽出一个接口定义视图的渲染方法
  */
-@Plugin
+@Plugin(active = true)
 public class ViewResolvePlugin implements IPlugin {
 
   private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
