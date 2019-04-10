@@ -35,7 +35,7 @@ public class Server {
     });
   }
 
-  public void start(Class clazz) {
+  public void run(Class clazz) {
     // 扫包
     log.info("开始扫包");
     Beans.init(clazz.getPackage().getName());
