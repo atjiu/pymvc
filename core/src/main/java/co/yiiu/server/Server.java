@@ -37,7 +37,9 @@ public class Server {
 
   public void run(Class clazz) {
     // 扫包
-    log.info("开始扫包");
+    log.info("开始扫框架下的包, 包名: co.yiiu");
+    Beans.init("co.yiiu");
+    log.info("开始扫项目下的包, 包名: {}", clazz.getPackage().getName());
     Beans.init(clazz.getPackage().getName());
 
     // 初始化插件

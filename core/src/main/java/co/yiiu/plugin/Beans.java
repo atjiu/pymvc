@@ -4,6 +4,7 @@ import co.yiiu.annotation.Component;
 import co.yiiu.util.ReflectUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
  */
 public class Beans {
 
+  private static List<String> annotationClassNames = new ArrayList<>();
   private static Map<String, Object> beans = new HashMap<>();
 
   // 扫描包
@@ -20,7 +22,9 @@ public class Beans {
     try {
       ReflectUtil reflectUtil = new ReflectUtil(packageName);
       List<String> allClassFullNames = reflectUtil.getFullyQualifiedClassNameList();
-      List<String> annotationClassNames = reflectUtil.getClassNameListByAnnotation(allClassFullNames, Component.class);
+      if (annotationClassNames.isEmpty()) {
+        annotationClassNames = reflectUtil.getClassNameListByAnnotation(allClassFullNames, Component.class);
+      }
       for (String annotation : annotationClassNames) {
         Class<?> aClass = Class.forName(annotation);
         List<String> componentClassNames = reflectUtil.getClassNameListByAnnotation(allClassFullNames, aClass);

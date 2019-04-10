@@ -1,4 +1,4 @@
-package co.yiiu;
+package com.example;
 
 import co.yiiu.server.Server;
 

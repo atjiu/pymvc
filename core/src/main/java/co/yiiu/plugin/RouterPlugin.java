@@ -4,6 +4,8 @@ import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.GetMapping;
 import co.yiiu.annotation.Plugin;
 import co.yiiu.annotation.PostMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -18,6 +20,8 @@ import java.util.Map;
  */
 @Plugin
 public class RouterPlugin implements IPlugin {
+
+  private Logger log = LoggerFactory.getLogger(RouterPlugin.class);
 
   private Map<String, Map<String, Object>> getMappingMap = new HashMap<>();
   private Map<String, Map<String, Object>> postMappingMap = new HashMap<>();
@@ -51,12 +55,16 @@ public class RouterPlugin implements IPlugin {
         // get method
         GetMapping getMappingMethod = method.getDeclaredAnnotation(GetMapping.class);
         if (getMappingMethod != null) {
-          getMappingMap.put(getMappingMethod.value(), assemble(method, controller, method.getParameters()));
+          String url = getMappingMethod.value();
+          log.info("[GET] {} {}", url, controller.getClass().getName());
+          getMappingMap.put(url, assemble(method, controller, method.getParameters()));
         }
         // post method
         PostMapping postMappingMethod = method.getDeclaredAnnotation(PostMapping.class);
         if (postMappingMethod != null) {
-          postMappingMap.put(postMappingMethod.value(), assemble(method, controller, method.getParameters()));
+          String url = postMappingMethod.value();
+          log.info("[POST] {} {}", url, controller.getClass().getName());
+          postMappingMap.put(url, assemble(method, controller, method.getParameters()));
         }
       }
     }

@@ -1,4 +1,4 @@
-package co.yiiu.controller;
+package com.example.controller;
 
 import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.GetMapping;

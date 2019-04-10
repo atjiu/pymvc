@@ -5,8 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>co.yiiu</groupId>
-  <artifactId>observer-demo</artifactId>
+  <artifactId>pymvc</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>core</module>
+    <module>demo</module>
+  </modules>
 
   <properties>
     <java.version>1.8</java.version>

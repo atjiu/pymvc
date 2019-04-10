@@ -10,6 +10,7 @@ PYMVC是一个基于`undertow`封装的支持插件的mvc框架，功能逐渐�
 - [ ] 拦截器
 - [ ] 支持热加载
 - [ ] ORM插件
+- [ ] 增加自动注入变量功能 @Autowired
 
 **想到了继续加...**
 
@@ -65,6 +66,15 @@ public class Application {
   }
 }
 ```
+
+## 运行demo
+
+项目里有两个模块
+
+- core 框架的核心代码
+- demo 依赖core模块开发的网站
+
+直接运行demo模块下的 Application.java 类中的main方法即可启动，访问 http://localhost:8080
 
 ## 贡献
 
