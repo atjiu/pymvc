@@ -1,9 +1,6 @@
 package co.yiiu.plugin;
 
-import co.yiiu.annotation.Controller;
-import co.yiiu.annotation.GetMapping;
-import co.yiiu.annotation.Plugin;
-import co.yiiu.annotation.PostMapping;
+import co.yiiu.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,39 +18,62 @@ public class RouterPlugin implements IPlugin {
 
   private Logger log = LoggerFactory.getLogger(RouterPlugin.class);
 
-  private Map<String, Map<String, Object>> getMappingMap = new HashMap<>();
-  private Map<String, Map<String, Object>> postMappingMap = new HashMap<>();
+  private Map<String, Map<String, Map<String, Object>>> mappingMap = new HashMap<>();
 
-  public Map<String, Map<String, Object>> getGetMappingMap() {
-    return getMappingMap;
+  private void initMappingMap() {
+    if (mappingMap.isEmpty()) {
+      List<Object> controllers = Beans.getAnnotationBeans(Controller.class);
+      Map getMappingMap = new HashMap();
+      Map postMappingMap = new HashMap();
+      Map putMappingMap = new HashMap();
+      Map deleteMappingMap = new HashMap();
+      for (Object controller : controllers) {
+        Method[] methods = controller.getClass().getMethods();
+        for (Method method : methods) {
+          // get method
+          GetMapping getMappingMethod = method.getDeclaredAnnotation(GetMapping.class);
+          if (getMappingMethod != null) {
+            String url = getMappingMethod.value();
+            log.info("[GET] {} {}", url, controller.getClass().getName());
+            getMappingMap.put(url, assemble(method, controller, method.getParameters()));
+          }
+          // post method
+          PostMapping postMappingMethod = method.getDeclaredAnnotation(PostMapping.class);
+          if (postMappingMethod != null) {
+            String url = postMappingMethod.value();
+            log.info("[POST] {} {}", url, controller.getClass().getName());
+            postMappingMap.put(url, assemble(method, controller, method.getParameters()));
+          }
+          // put method
+          PutMapping putMappingMethod = method.getDeclaredAnnotation(PutMapping.class);
+          if (putMappingMethod != null) {
+            String url = putMappingMethod.value();
+            log.info("[PUT] {} {}", url, controller.getClass().getName());
+            putMappingMap.put(url, assemble(method, controller, method.getParameters()));
+          }
+          // delete method
+          DeleteMapping deleteMappingMethod = method.getDeclaredAnnotation(DeleteMapping.class);
+          if (deleteMappingMethod != null) {
+            String url = deleteMappingMethod.value();
+            log.info("[PUT] {} {}", url, controller.getClass().getName());
+            deleteMappingMap.put(url, assemble(method, controller, method.getParameters()));
+          }
+        }
+      }
+      mappingMap.put(GetMapping.class.getName(), getMappingMap);
+      mappingMap.put(PostMapping.class.getName(), postMappingMap);
+      mappingMap.put(PutMapping.class.getName(), putMappingMap);
+      mappingMap.put(DeleteMapping.class.getName(), deleteMappingMap);
+    }
   }
 
-  public Map<String, Map<String, Object>> getPostMappingMap() {
-    return postMappingMap;
+  public Map<String, Map<String, Object>> getMappingMap(Class clazz) {
+    return mappingMap.get(clazz.getName());
   }
 
   @Override
   public void init() throws Exception {
-    List<Object> controllers = Beans.getAnnotationBeans(Controller.class);
-    for (Object controller : controllers) {
-      Method[] methods = controller.getClass().getMethods();
-      for (Method method : methods) {
-        // get method
-        GetMapping getMappingMethod = method.getDeclaredAnnotation(GetMapping.class);
-        if (getMappingMethod != null) {
-          String url = getMappingMethod.value();
-          log.info("[GET] {} {}", url, controller.getClass().getName());
-          getMappingMap.put(url, assemble(method, controller, method.getParameters()));
-        }
-        // post method
-        PostMapping postMappingMethod = method.getDeclaredAnnotation(PostMapping.class);
-        if (postMappingMethod != null) {
-          String url = postMappingMethod.value();
-          log.info("[POST] {} {}", url, controller.getClass().getName());
-          postMappingMap.put(url, assemble(method, controller, method.getParameters()));
-        }
-      }
-    }
+    initMappingMap();
   }
 
   public Map<String, Object> assemble(Method method, Object clazz, Parameter[] parameters) {
@@ -63,4 +83,5 @@ public class RouterPlugin implements IPlugin {
     map.put("params", parameters);
     return map;
   }
+
 }

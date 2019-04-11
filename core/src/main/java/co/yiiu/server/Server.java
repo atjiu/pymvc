@@ -4,6 +4,7 @@ import co.yiiu.annotation.Plugin;
 import co.yiiu.annotation.Plugins;
 import co.yiiu.handler.DispatchHttpHandler;
 import co.yiiu.plugin.Beans;
+import co.yiiu.plugin.RouterPlugin;
 import co.yiiu.util.PropUtil;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
@@ -59,8 +60,8 @@ public class Server {
     log.info("创建服务");
     Integer port = PropUtil.getInt("server.port");
     Undertow server = Undertow.builder()
-        .addHttpListener(port == null ? 8080 : port, "localhost")
-        .setHandler(new DispatchHttpHandler()).build();
+        .addHttpListener(port == null ? 8080 : port, "localhost", new DispatchHttpHandler().getRoutes())
+        .build();
 
     log.info("启动服务");
     server.start();

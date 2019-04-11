@@ -1,6 +1,8 @@
 package co.yiiu.util;
 
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 源码来自：https://blog.csdn.net/neosmith/article/details/43955963
@@ -9,6 +11,12 @@ public class StringUtil {
 
   private StringUtil() {
 
+  }
+
+  public static boolean matches(String text, String regex) {
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(text);
+    return matcher.find();
   }
 
   /**

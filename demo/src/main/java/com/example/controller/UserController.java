@@ -6,15 +6,22 @@ import co.yiiu.annotation.PostMapping;
 import co.yiiu.annotation.ResponseBody;
 import io.undertow.server.HttpServerExchange;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tomoya at 2019/4/9
  */
 @Controller
 public class UserController {
+
+  @GetMapping("/user/{username}")
+  @ResponseBody
+  public Map profile(HttpServerExchange exchange, Map model) {
+    Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
+    Map map = new HashMap();
+    map.put("username", queryParameters.get("username").getFirst());
+    return map;
+  }
 
   @GetMapping("/user/list")
   public String list(HttpServerExchange exchange, Map<String, Object> model) {

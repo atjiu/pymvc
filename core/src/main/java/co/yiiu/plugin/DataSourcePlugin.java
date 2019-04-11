@@ -1,6 +1,7 @@
 package co.yiiu.plugin;
 
 import co.yiiu.annotation.Plugin;
+import co.yiiu.util.PropUtil;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -19,10 +20,10 @@ import java.util.LinkedList;
 @Plugin
 public class DataSourcePlugin implements DataSource, IPlugin {
 
-  private static final String driverClassName = "com.mysql.jdbc.Driver";
-  private static final String url = "jdbc:mysql://127.0.0.1:3306/pybbs";
-  private static final String user = "root";
-  private static final String pswd = "";
+  private static final String driverClassName = PropUtil.getString("jdbc.driver");
+  private static final String url = PropUtil.getString("jdbc.url");
+  private static final String user = PropUtil.getString("jdbc.user");
+  private static final String password = PropUtil.getString("jdbc.password");
   //连接池
   private static LinkedList<Connection> pool = new LinkedList<>();
   private static DataSourcePlugin instance = new DataSourcePlugin();
@@ -65,7 +66,7 @@ public class DataSourcePlugin implements DataSource, IPlugin {
   }
 
   private Connection makeConnection() throws SQLException {
-    return DriverManager.getConnection(url, user, pswd);
+    return DriverManager.getConnection(url, user, password);
   }
 
   public Connection getConnection(String username, String password) throws SQLException {
