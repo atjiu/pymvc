@@ -34,38 +34,102 @@ public class DispatchHttpHandler {
     Map<String, Map<String, Object>> postMappingMap = routerPlugin.getMappingMap(PostMapping.class);
     Map<String, Map<String, Object>> putMappingMap = routerPlugin.getMappingMap(PutMapping.class);
     Map<String, Map<String, Object>> deleteMappingMap = routerPlugin.getMappingMap(DeleteMapping.class);
-    handleRequest(getMappingMap);
-    handleRequest(postMappingMap);
-    handleRequest(putMappingMap);
-    handleRequest(deleteMappingMap);
-  }
+    getMappingMap.forEach((key, value) -> {
+      routes.get(key, exchange -> {
+        // 转发部分
+        Map<String, Object> model = new HashMap<>();
+        Object clazz = value.get("clazz");
+        Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
 
-  private void handleRequest(Map<String, Map<String, Object>> postMappingMap) {
-    postMappingMap.forEach((key, value) -> routes.get(key, exchange -> {
-      // 转发部分
-      Map<String, Object> model = new HashMap<>();
-      Object clazz = value.get("clazz");
-      Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
-
-      // 响应部分
-      // 判断是否有 @ResponseBody 注解
-      ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
-      if (responseBodyAnnotation == null) {
-        viewResolvePlugin.render(exchange, (String) returnValue, model);
-      } else {
-        if (returnValue instanceof String) {
-          // 如果是String类型，则直接渲染text/plain
-          exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-          exchange.getResponseSender().send((String) returnValue);
+        // 响应部分
+        // 判断是否有 @ResponseBody 注解
+        ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
+        if (responseBodyAnnotation == null) {
+          viewResolvePlugin.render(exchange, (String) returnValue, model);
         } else {
-          jsonViewResolvePlugin.render(exchange, returnValue);
+          if (returnValue instanceof String) {
+            // 如果是String类型，则直接渲染text/plain
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send((String) returnValue);
+          } else {
+            jsonViewResolvePlugin.render(exchange, returnValue);
+          }
         }
-      }
-    }));
+      });
+    });
+    postMappingMap.forEach((key, value) -> {
+      routes.post(key, exchange -> {
+        // 转发部分
+        Map<String, Object> model = new HashMap<>();
+        Object clazz = value.get("clazz");
+        Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
+
+        // 响应部分
+        // 判断是否有 @ResponseBody 注解
+        ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
+        if (responseBodyAnnotation == null) {
+          viewResolvePlugin.render(exchange, (String) returnValue, model);
+        } else {
+          if (returnValue instanceof String) {
+            // 如果是String类型，则直接渲染text/plain
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send((String) returnValue);
+          } else {
+            jsonViewResolvePlugin.render(exchange, returnValue);
+          }
+        }
+      });
+    });
+    putMappingMap.forEach((key, value) -> {
+      routes.put(key, exchange -> {
+        // 转发部分
+        Map<String, Object> model = new HashMap<>();
+        Object clazz = value.get("clazz");
+        Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
+
+        // 响应部分
+        // 判断是否有 @ResponseBody 注解
+        ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
+        if (responseBodyAnnotation == null) {
+          viewResolvePlugin.render(exchange, (String) returnValue, model);
+        } else {
+          if (returnValue instanceof String) {
+            // 如果是String类型，则直接渲染text/plain
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send((String) returnValue);
+          } else {
+            jsonViewResolvePlugin.render(exchange, returnValue);
+          }
+        }
+      });
+    });
+    deleteMappingMap.forEach((key, value) -> {
+      routes.delete(key, exchange -> {
+        // 转发部分
+        Map<String, Object> model = new HashMap<>();
+        Object clazz = value.get("clazz");
+        Object returnValue = ((Method) value.get("method")).invoke(clazz, exchange, model);
+
+        // 响应部分
+        // 判断是否有 @ResponseBody 注解
+        ResponseBody responseBodyAnnotation = ((Method) value.get("method")).getAnnotation(ResponseBody.class);
+        if (responseBodyAnnotation == null) {
+          viewResolvePlugin.render(exchange, (String) returnValue, model);
+        } else {
+          if (returnValue instanceof String) {
+            // 如果是String类型，则直接渲染text/plain
+            exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+            exchange.getResponseSender().send((String) returnValue);
+          } else {
+            jsonViewResolvePlugin.render(exchange, returnValue);
+          }
+        }
+      });
+    });
   }
 
-  public void handleRequest(HttpServerExchange exchange) throws Exception {
-    // 获取请求路径
+//  public void handleRequest(HttpServerExchange exchange) throws Exception {
+  // 获取请求路径
 //    String path = exchange.getRequestPath();
 //    String requestMethod = exchange.getRequestMethod().toString();
 //    Map<String, Object> value = null;
@@ -99,7 +163,7 @@ public class DispatchHttpHandler {
 //      exchange.getResponseHeaders().put(Headers.STATUS, 404);
 //      exchange.getResponseSender().send("404");
 //    }
-    // 转发部分
+  // 转发部分
 //    Map<String, Object> model = new HashMap<>();
 //    Object clazz = this.target.get("clazz");
 //    Object returnValue = ((Method) this.target.get("method")).invoke(clazz, exchange, model);
@@ -118,6 +182,6 @@ public class DispatchHttpHandler {
 //        jsonViewResolvePlugin.render(exchange, returnValue);
 //      }
 //    }
-  }
+//  }
 
 }
