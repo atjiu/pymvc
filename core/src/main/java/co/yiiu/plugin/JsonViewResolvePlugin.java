@@ -8,7 +8,7 @@ import io.undertow.util.Headers;
 /**
  * Created by tomoya at 2019/4/10
  */
-@Plugin(active = true)
+@Plugin
 public class JsonViewResolvePlugin implements IPlugin {
 
   private static Gson gson;

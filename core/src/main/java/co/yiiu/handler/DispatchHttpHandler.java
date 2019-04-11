@@ -8,10 +8,7 @@ import co.yiiu.plugin.ViewResolvePlugin;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
-import io.undertow.util.HttpString;
 
-import javax.servlet.HttpMethodConstraintElement;
-import javax.servlet.annotation.HttpMethodConstraint;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;

@@ -16,7 +16,7 @@ import java.util.LinkedList;
  *
  * @author leizhimin 2010-1-14 0:03:17
  */
-@Plugin(active = false)
+@Plugin
 public class DataSourcePlugin implements DataSource, IPlugin {
 
   private static final String driverClassName = "com.mysql.jdbc.Driver";
@@ -30,7 +30,6 @@ public class DataSourcePlugin implements DataSource, IPlugin {
   @Override
   public void init() throws Exception {
     Class.forName(driverClassName);
-    System.out.println(getConnection());
   }
 
   /**

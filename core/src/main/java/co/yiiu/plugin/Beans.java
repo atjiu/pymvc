@@ -1,6 +1,9 @@
 package co.yiiu.plugin;
 
 import co.yiiu.annotation.Component;
+import co.yiiu.annotation.Controller;
+import co.yiiu.annotation.Plugin;
+import co.yiiu.annotation.Plugins;
 import co.yiiu.util.ReflectUtil;
 
 import java.io.IOException;
@@ -16,6 +19,8 @@ public class Beans {
 
   private static List<String> annotationClassNames = new ArrayList<>();
   private static Map<String, Object> beans = new HashMap<>();
+  // 存放被注解修饰的类
+  private static Map<String, List<Object>> annotationBeans = new HashMap<>();
 
   // 扫描包
   public static void init(String packageName) {
@@ -45,6 +50,29 @@ public class Beans {
   @SuppressWarnings("unchecked")
   public static <T> T getBean(Class<T> clazz) {
     return (T) beans.get(clazz.getName());
+  }
+
+  public static List<Object> getAnnotationBeans(Class clazz) {
+    if (annotationBeans.isEmpty()) {
+      List<Object> plugins = new ArrayList<>();
+      List<Object> plugin = new ArrayList<>();
+      List<Object> controller = new ArrayList<>();
+      Beans.getBeans().forEach((key, value) -> {
+        if (value.getClass().getDeclaredAnnotation(Plugins.class) != null) {
+          plugins.add(value);
+        }
+        if (value.getClass().getDeclaredAnnotation(Plugin.class) != null) {
+          plugin.add(value);
+        }
+        if (value.getClass().getDeclaredAnnotation(Controller.class) != null) {
+          controller.add(value);
+        }
+      });
+      annotationBeans.put(Plugin.class.getName(), plugin);
+      annotationBeans.put(Plugins.class.getName(), plugins);
+      annotationBeans.put(Controller.class.getName(), controller);
+    }
+    return annotationBeans.get(clazz.getName());
   }
 
 }

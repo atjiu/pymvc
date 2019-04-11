@@ -7,10 +7,8 @@ import co.yiiu.annotation.PostMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +16,7 @@ import java.util.Map;
 /**
  * Created by tomoya at 2019/4/10
  */
-@Plugin(active = true)
+@Plugin
 public class RouterPlugin implements IPlugin {
 
   private Logger log = LoggerFactory.getLogger(RouterPlugin.class);
@@ -34,21 +32,9 @@ public class RouterPlugin implements IPlugin {
     return postMappingMap;
   }
 
-  private List<Object> getController() {
-    List<Object> controllers = new ArrayList<>();
-    Map<String, Object> beans = Beans.getBeans();
-    beans.forEach((key, value) -> {
-      Annotation declaredAnnotation = value.getClass().getDeclaredAnnotation(Controller.class);
-      if (declaredAnnotation != null) {
-        controllers.add(value);
-      }
-    });
-    return controllers;
-  }
-
   @Override
   public void init() throws Exception {
-    List<Object> controllers = getController();
+    List<Object> controllers = Beans.getAnnotationBeans(Controller.class);
     for (Object controller : controllers) {
       Method[] methods = controller.getClass().getMethods();
       for (Method method : methods) {
@@ -69,7 +55,6 @@ public class RouterPlugin implements IPlugin {
       }
     }
   }
-
 
   public Map<String, Object> assemble(Method method, Object clazz, Parameter[] parameters) {
     Map<String, Object> map = new HashMap<>();
