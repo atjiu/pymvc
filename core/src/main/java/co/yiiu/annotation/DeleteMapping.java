@@ -12,6 +12,6 @@ import java.lang.annotation.*;
 @Component
 public @interface DeleteMapping {
 
-  String value() default "";
+    String value() default "";
 
 }

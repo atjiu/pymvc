@@ -2,10 +2,7 @@ package com.example.controller;
 
 import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.GetMapping;
-import io.undertow.server.HttpServerExchange;
-
-import java.util.Deque;
-import java.util.Map;
+import co.yiiu.domain.Model;
 
 /**
  * Created by tomoya at 2019/4/9
@@ -13,16 +10,17 @@ import java.util.Map;
 @Controller
 public class HelloController {
 
-  @GetMapping("/")
-  public String index(HttpServerExchange exchange, Map<String, Object> model) {
-    Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
-    Deque<String> name = queryParameters.get("name");
-    model.put("name", name == null ? null : name.getFirst());
-    return "index";
-  }
+    @GetMapping("/")
+    public String index(String name, int age, Model model, boolean gender, double salary) {
+        model.addAttribute("name", name);
+        model.addAttribute("age", age);
+        model.addAttribute("gender", gender);
+        model.addAttribute("salary", salary);
+        return "index";
+    }
 
-  @GetMapping("/about")
-  public String about(HttpServerExchange exchange, Map<String, Object> model) {
-    return "about";
-  }
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
 }

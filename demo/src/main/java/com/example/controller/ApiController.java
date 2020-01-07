@@ -1,10 +1,10 @@
 package com.example.controller;
 
-import co.yiiu.annotation.Controller;
-import co.yiiu.annotation.GetMapping;
-import co.yiiu.annotation.ResponseBody;
-import io.undertow.server.HttpServerExchange;
+import co.yiiu.annotation.*;
+import co.yiiu.domain.Model;
+import com.example.model.User;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,19 +13,27 @@ import java.util.Map;
 @Controller
 public class ApiController {
 
-  // 返回string demo
-  @GetMapping("/api/index")
-  @ResponseBody
-  public String index(HttpServerExchange exchange, Map model) {
-    return "hello world";
-  }
+    // 返回string demo
+    @GetMapping("/api/index")
+    @ResponseBody
+    public String index(Model model) {
+        return "hello world";
+    }
 
-  @GetMapping("/api/list")
-  @ResponseBody
-  public Map list(HttpServerExchange exchange, Map map) {
-    map.put("name", "hello world");
-    map.put("age", 20);
-    map.put("email", "py2qiuse@gmail.com");
-    return map;
-  }
+    @GetMapping("/api/list")
+    @ResponseBody
+    public Object list() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "hello world");
+        map.put("age", 20);
+        map.put("email", "py2qiuse@gmail.com");
+        return map;
+    }
+
+    @PostMapping("/api/user/add")
+    @ResponseBody
+    public Object add(@RequestBody User user) {
+        System.out.println(user.toString());
+        return user;
+    }
 }

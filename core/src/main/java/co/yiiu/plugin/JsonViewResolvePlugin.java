@@ -11,24 +11,24 @@ import io.undertow.util.Headers;
 @Plugin
 public class JsonViewResolvePlugin implements IPlugin {
 
-  private static Gson gson;
+    private static Gson gson;
 
-  public <T> T fromJson(String json, Class<T> clazz) {
-    return gson.fromJson(json, clazz);
-  }
+    public <T> T fromJson(String json, Class<T> clazz) {
+        return gson.fromJson(json, clazz);
+    }
 
-  public String toJson(Object object) {
-    return gson.toJson(object);
-  }
+    public String toJson(Object object) {
+        return gson.toJson(object);
+    }
 
-  @Override
-  public void init() throws Exception {
-    gson = new Gson();
-  }
+    @Override
+    public void init() throws Exception {
+        gson = new Gson();
+    }
 
-  public void render(HttpServerExchange exchange, Object returnValue) {
-    String json = this.toJson(returnValue);
-    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
-    exchange.getResponseSender().send(json);
-  }
+    public void render(HttpServerExchange exchange, Object returnValue) {
+        String json = this.toJson(returnValue);
+        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
+        exchange.getResponseSender().send(json);
+    }
 }

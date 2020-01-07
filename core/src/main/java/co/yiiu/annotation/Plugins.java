@@ -13,6 +13,6 @@ import java.lang.annotation.*;
 @Component
 public @interface Plugins {
 
-  Class<?>[] exclude() default {};
+    Class<?>[] exclude() default {};
 
 }

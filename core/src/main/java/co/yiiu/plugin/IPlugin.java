@@ -7,5 +7,5 @@ package co.yiiu.plugin;
  */
 public interface IPlugin {
 
-  void init() throws Exception;
+    void init() throws Exception;
 }

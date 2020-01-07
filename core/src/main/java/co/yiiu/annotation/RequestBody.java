@@ -5,13 +5,11 @@ import java.lang.annotation.*;
 /**
  * Created by tomoya at 2019/4/8
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
 @Component
-public @interface PostMapping {
-
-    String value() default "";
+public @interface RequestBody {
 
 }
