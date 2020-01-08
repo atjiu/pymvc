@@ -72,6 +72,7 @@ public class DispatchHttpHandler {
             RequestBody requestBody = parameter.getAnnotation(RequestBody.class);
             PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
             if (requestBody != null) {
+                // !!! 我这是将请求的输入流转成json字符串，然后再将json字符串通过fastjson转成对象，总感觉这样不是最优解，有大佬看到这时恳请优化 !!!
                 String text = IOUtils.inputStreamToString(exchange.getInputStream());
                 paramsObj[i] = JsonUtils.jsonToObject(text, parameter.getType());
             } else if (pathVariable != null) {
