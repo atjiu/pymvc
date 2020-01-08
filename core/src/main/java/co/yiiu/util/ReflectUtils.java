@@ -20,8 +20,8 @@ import java.util.jar.JarInputStream;
  * <p>
  * 源码来自：https://blog.csdn.net/neosmith/article/details/43955963
  */
-public class ReflectUtil {
-    private Logger logger = LoggerFactory.getLogger(ReflectUtil.class);
+public class ReflectUtils {
+    private Logger logger = LoggerFactory.getLogger(ReflectUtils.class);
 
     private String basePackage;
     private ClassLoader cl;
@@ -31,7 +31,7 @@ public class ReflectUtil {
      *
      * @param basePackage The base package to scan.
      */
-    public ReflectUtil(String basePackage) {
+    public ReflectUtils(String basePackage) {
         this.basePackage = basePackage;
         this.cl = getClass().getClassLoader();
 
@@ -43,7 +43,7 @@ public class ReflectUtil {
      * @param basePackage The base package to scan.
      * @param cl          Use this class load to locate the package.
      */
-    public ReflectUtil(String basePackage, ClassLoader cl) {
+    public ReflectUtils(String basePackage, ClassLoader cl) {
         this.basePackage = basePackage;
         this.cl = cl;
     }
@@ -71,11 +71,11 @@ public class ReflectUtil {
      */
     private List<String> doScan(String basePackage, List<String> nameList) throws IOException {
         // replace dots with splashes
-        String splashPath = StringUtil.dotToSplash(basePackage);
+        String splashPath = StringUtils.dotToSplash(basePackage);
 
         // get file path
         URL url = cl.getResource(splashPath);
-        String filePath = StringUtil.getRootPath(url);
+        String filePath = StringUtils.getRootPath(url);
 
         // Get classes in that package.
         // If the web server unzips the jar file, then the classes will exist in the form of
@@ -126,7 +126,7 @@ public class ReflectUtil {
     private String toFullyQualifiedName(String shortName, String basePackage) {
         StringBuilder sb = new StringBuilder(basePackage);
         sb.append('.');
-        sb.append(StringUtil.trimExtension(shortName));
+        sb.append(StringUtils.trimExtension(shortName));
 
         return sb.toString();
     }
@@ -186,7 +186,7 @@ public class ReflectUtil {
      * For test purpose.
      */
     public static void main(String[] args) throws Exception {
-        ReflectUtil scan = new ReflectUtil("co.yiiu");
+        ReflectUtils scan = new ReflectUtils("co.yiiu");
         List<String> classNameList = scan.getFullyQualifiedClassNameList();
         System.out.println(classNameList.toString());
     }

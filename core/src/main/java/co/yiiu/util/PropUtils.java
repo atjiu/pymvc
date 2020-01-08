@@ -10,15 +10,15 @@ import java.util.Properties;
 /**
  * Created by tomoya at 2019/4/10
  */
-public class PropUtil {
+public class PropUtils {
 
-    private static Logger log = LoggerFactory.getLogger(PropUtil.class);
+    private static Logger log = LoggerFactory.getLogger(PropUtils.class);
 
     private static Properties properties = new Properties();
 
     static {
         try {
-            InputStream is = PropUtil.class.getClassLoader().getResourceAsStream("application.properties");
+            InputStream is = PropUtils.class.getClassLoader().getResourceAsStream("application.properties");
             properties.load(is);
         } catch (IOException e) {
             log.error("加载配置文件出错");
@@ -36,6 +36,6 @@ public class PropUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(PropUtil.getInt("port"));
+        System.out.println(PropUtils.getInt("port"));
     }
 }

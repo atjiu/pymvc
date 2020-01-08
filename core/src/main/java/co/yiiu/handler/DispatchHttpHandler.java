@@ -6,6 +6,8 @@ import co.yiiu.plugin.Beans;
 import co.yiiu.plugin.JsonViewResolvePlugin;
 import co.yiiu.plugin.RouterPlugin;
 import co.yiiu.plugin.ViewResolvePlugin;
+import co.yiiu.util.IOUtils;
+import co.yiiu.util.JsonUtils;
 import freemarker.template.TemplateException;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.RoutingHandler;
@@ -48,6 +50,11 @@ public class DispatchHttpHandler {
 
         ClassPathResourceManager classPathManager = new ClassPathResourceManager(DispatchHttpHandler.class.getClassLoader(), "/static/");
         routes.get("/static", resource(classPathManager).setDirectoryListingEnabled(true));
+        routes.setFallbackHandler(exchange -> {
+            String requestPath = exchange.getRequestPath();
+            exchange.setStatusCode(404);
+            exchange.getResponseSender().send("<h1>404 Not Found</h1><p>" + requestPath + "</p>");
+        });
     }
 
     private void forward(HttpServerExchange exchange, Map<String, Object> value) throws InvocationTargetException, IllegalAccessException, IOException, TemplateException {
@@ -58,14 +65,15 @@ public class DispatchHttpHandler {
         Parameter[] parameters = method.getParameters();
         Object[] paramsObj = new Object[parameters.length];
         Map<String, Deque<String>> queryParameters = exchange.getQueryParameters();
-//        Map<String, Deque<String>> pathParameters = exchange.getPathParameters();
+        Map<String, Deque<String>> pathParameters = exchange.getPathParameters();
         for (int i = 0; i < parameters.length; i++) {
             // 获取加了 @RequestBody 注解的参数
             Parameter parameter = parameters[i];
             RequestBody requestBody = parameter.getAnnotation(RequestBody.class);
             PathVariable pathVariable = parameter.getAnnotation(PathVariable.class);
             if (requestBody != null) {
-                // stuff..
+                String text = IOUtils.inputStreamToString(exchange.getInputStream());
+                paramsObj[i] = JsonUtils.jsonToObject(text, parameter.getType());
             } else if (pathVariable != null) {
                 // 为毛这种被 @PathVariable 修饰的字段不是从 exchange.getPathParameters() 里获取的数据??
                 Deque<String> strings = queryParameters.get(parameter.getName());

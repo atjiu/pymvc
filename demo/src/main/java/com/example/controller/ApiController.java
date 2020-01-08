@@ -33,7 +33,6 @@ public class ApiController {
     @PostMapping("/api/user/add")
     @ResponseBody
     public Object add(@RequestBody User user) {
-        System.out.println(user.toString());
         return user;
     }
 }

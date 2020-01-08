@@ -4,7 +4,7 @@ import co.yiiu.annotation.Plugin;
 import co.yiiu.annotation.Plugins;
 import co.yiiu.handler.DispatchHttpHandler;
 import co.yiiu.plugin.Beans;
-import co.yiiu.util.PropUtil;
+import co.yiiu.util.PropUtils;
 import io.undertow.Undertow;
 import io.undertow.server.handlers.BlockingHandler;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class Server {
 
         BlockingHandler blockingHandler = new BlockingHandler(new DispatchHttpHandler().getRoutes());
 
-        Integer port = PropUtil.getInt("server.port");
+        Integer port = PropUtils.getInt("server.port");
         Undertow server = Undertow.builder()
                 .addHttpListener(port == null ? 8080 : port, "localhost")
                 .setHandler(blockingHandler)

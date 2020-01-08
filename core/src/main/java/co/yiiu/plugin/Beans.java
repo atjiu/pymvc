@@ -4,7 +4,7 @@ import co.yiiu.annotation.Component;
 import co.yiiu.annotation.Controller;
 import co.yiiu.annotation.Plugin;
 import co.yiiu.annotation.Plugins;
-import co.yiiu.util.ReflectUtil;
+import co.yiiu.util.ReflectUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,14 +25,14 @@ public class Beans {
     // 扫描包
     public static void init(String packageName) {
         try {
-            ReflectUtil reflectUtil = new ReflectUtil(packageName);
-            List<String> allClassFullNames = reflectUtil.getFullyQualifiedClassNameList();
+            ReflectUtils reflectUtils = new ReflectUtils(packageName);
+            List<String> allClassFullNames = reflectUtils.getFullyQualifiedClassNameList();
             if (annotationClassNames.isEmpty()) {
-                annotationClassNames = reflectUtil.getClassNameListByAnnotation(allClassFullNames, Component.class);
+                annotationClassNames = reflectUtils.getClassNameListByAnnotation(allClassFullNames, Component.class);
             }
             for (String annotation : annotationClassNames) {
                 Class<?> aClass = Class.forName(annotation);
-                List<String> componentClassNames = reflectUtil.getClassNameListByAnnotation(allClassFullNames, aClass);
+                List<String> componentClassNames = reflectUtils.getClassNameListByAnnotation(allClassFullNames, aClass);
                 for (String componentClassName : componentClassNames) {
                     Class<?> bClass = Class.forName(componentClassName);
                     beans.put(bClass.getName(), bClass.newInstance());

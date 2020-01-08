@@ -7,10 +7,14 @@ import java.util.regex.Pattern;
 /**
  * 源码来自：https://blog.csdn.net/neosmith/article/details/43955963
  */
-public class StringUtil {
+public class StringUtils {
 
-    private StringUtil() {
+    private StringUtils() {
 
+    }
+
+    public static boolean isEmpty(Object text) {
+        return text == null || text == "";
     }
 
     public static boolean matches(String text, String regex) {
