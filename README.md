@@ -11,7 +11,7 @@ PYMVC是一个基于`undertow`封装的支持插件的mvc框架，功能逐渐�
 - [x] 支持热加载，代码有变动，IDEA里build一下项目，会自动重启加载
 - [ ] 拦截器
 - [ ] ORM(原生jdbc实现 || 通过动态代理实现一个简易的hibernate)
-- [ ] 增加自动注入变量功能 @Autowired
+- [x] 增加自动注入变量功能 @Autowired
 - [ ] AOP
 
 **想到了继续加...**
@@ -57,9 +57,13 @@ public class ViewResolvePlugin implements IPlugin {
 ```java
 @Controller
 public class HelloController {
+    
+  @Autowired
+  private UserService userService;
 
   @GetMapping("/")
   public String index(Model model) {
+    userService.sayHello();
     model.addAttribute("name", "world");
     return "index";
   }

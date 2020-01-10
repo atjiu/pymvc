@@ -33,41 +33,41 @@ public class RouterPlugin implements IPlugin {
                     GetMapping getMappingMethod = method.getDeclaredAnnotation(GetMapping.class);
                     if (getMappingMethod != null) {
                         String url = getMappingMethod.value();
-                        log.info("[GET] {} {}", url, controller.getClass().getName());
+                        log.info("[GET] {} {}", url, controller.getClass().getSimpleName());
                         getMappingMap.put(url, assemble(method, controller));
                     }
                     // post method
                     PostMapping postMappingMethod = method.getDeclaredAnnotation(PostMapping.class);
                     if (postMappingMethod != null) {
                         String url = postMappingMethod.value();
-                        log.info("[POST] {} {}", url, controller.getClass().getName());
+                        log.info("[POST] {} {}", url, controller.getClass().getSimpleName());
                         postMappingMap.put(url, assemble(method, controller));
                     }
                     // put method
                     PutMapping putMappingMethod = method.getDeclaredAnnotation(PutMapping.class);
                     if (putMappingMethod != null) {
                         String url = putMappingMethod.value();
-                        log.info("[PUT] {} {}", url, controller.getClass().getName());
+                        log.info("[PUT] {} {}", url, controller.getClass().getSimpleName());
                         putMappingMap.put(url, assemble(method, controller));
                     }
                     // delete method
                     DeleteMapping deleteMappingMethod = method.getDeclaredAnnotation(DeleteMapping.class);
                     if (deleteMappingMethod != null) {
                         String url = deleteMappingMethod.value();
-                        log.info("[PUT] {} {}", url, controller.getClass().getName());
+                        log.info("[PUT] {} {}", url, controller.getClass().getSimpleName());
                         deleteMappingMap.put(url, assemble(method, controller));
                     }
                 }
             }
-            mappingMap.put(GetMapping.class.getName(), getMappingMap);
-            mappingMap.put(PostMapping.class.getName(), postMappingMap);
-            mappingMap.put(PutMapping.class.getName(), putMappingMap);
-            mappingMap.put(DeleteMapping.class.getName(), deleteMappingMap);
+            mappingMap.put(GetMapping.class.getSimpleName(), getMappingMap);
+            mappingMap.put(PostMapping.class.getSimpleName(), postMappingMap);
+            mappingMap.put(PutMapping.class.getSimpleName(), putMappingMap);
+            mappingMap.put(DeleteMapping.class.getSimpleName(), deleteMappingMap);
         }
     }
 
     public Map<String, Map<String, Object>> getMappingMap(Class<?> clazz) {
-        return mappingMap.get(clazz.getName());
+        return mappingMap.get(clazz.getSimpleName());
     }
 
     @Override

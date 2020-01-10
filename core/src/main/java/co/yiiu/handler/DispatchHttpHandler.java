@@ -2,10 +2,7 @@ package co.yiiu.handler;
 
 import co.yiiu.annotation.*;
 import co.yiiu.domain.Model;
-import co.yiiu.plugin.Beans;
-import co.yiiu.plugin.JsonViewResolvePlugin;
-import co.yiiu.plugin.RouterPlugin;
-import co.yiiu.plugin.ViewResolvePlugin;
+import co.yiiu.plugin.*;
 import co.yiiu.util.IOUtils;
 import co.yiiu.util.JsonUtils;
 import freemarker.template.TemplateException;
@@ -26,10 +23,11 @@ import static io.undertow.Handlers.resource;
 /**
  * Created by tomoya at 2019/4/10
  */
+@Component
 public class DispatchHttpHandler {
 
     // 获取相关bean
-    private ViewResolvePlugin viewResolvePlugin = Beans.getBean(ViewResolvePlugin.class);
+    private ViewResolvePlugin viewResolvePlugin = Beans.getBean(FreemarkerPlugin.class);
     private JsonViewResolvePlugin jsonViewResolvePlugin = Beans.getBean(JsonViewResolvePlugin.class);
     private RoutingHandler routes = new RoutingHandler();
 

@@ -45,12 +45,16 @@ public class Server {
         });
     }
 
-    public void run(Class clazz) {
+    public void run(Class<?> clazz) {
         // 扫包
         log.info("开始扫框架下的包, 包名: co.yiiu");
         Beans.init("co.yiiu");
         log.info("开始扫项目下的包, 包名: {}", clazz.getPackage().getName());
         Beans.init(clazz.getPackage().getName());
+
+        // 注入
+        log.info("开始注入变量");
+        Beans.inject();
 
         // 初始化插件
         log.info("初始化插件");
@@ -59,6 +63,7 @@ public class Server {
         // 启动服务
         log.info("创建服务");
 
+        log.info("初始化路由");
         BlockingHandler blockingHandler = new BlockingHandler(new DispatchHttpHandler().getRoutes());
 
         Integer port = PropUtils.getInt("server.port");
